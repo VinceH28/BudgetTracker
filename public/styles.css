@@ -3,9 +3,9 @@ body {
   font-family: Arial;
 }
 
-/* .wrapper {
-  background-image: ""
-} */
+.wrapper {
+  background-image: "/assets/background_image.png";
+}
 
 button, input {
   font-size: 100%;
