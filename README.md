@@ -34,4 +34,4 @@ List of features ready and TODOs for future development
 Project is: _finished.
 
 ## Contact
-Created by [@VinceH28](https://github.com/VinceH28/Homework2/) - feel free to contact me!
+Created by [@VinceH28](https://github.com/VinceH28/BudgetTracker) - feel free to contact me!
