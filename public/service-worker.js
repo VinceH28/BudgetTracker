@@ -4,58 +4,70 @@ const FILES_TO_CACHE = [
     '/index.js',
     'index.html',
     '/db.js',
-    '/icons/icon-192X192.png',
-    '/icons/icon-512x512.png',
+    '/assets/background_image.png',
     'style.css',
+    "/service-worker.js",
 ];
 
-const OFFLINEDATA = 'data-v1'; 
-const RUNDATA = 'rundata';
+const CACHE_NAME = 'data-v1'; 
+const DATA_CACHE_NAME = 'DATA_CACHE_NAME';
 
-self.addEventListener('install', (event) => {
-    event.waitUnitl(
+self.addevtListener('install', (evt) => {
+    evt.waitUnitl(
         caches
-        .open(OFFLINEDATA)
-        .then((cache) => cache.addAll(FILES_TO_CACHE))
-    );
+        .open(CACHE_NAME)
+        .then((cache) => {
+            return cache.addAll(FILES_TO_CACHE);
+        })
+);
+self.skipWaiting();
 });
 
 //Clean old cache
-self.addEventListener('activate', (event) => {
-    event.waitUnitl(
+self.addevtListener('activate', function (evt) {
+    evt.waitUnitl(
     caches
         .keys()
-        .then((cacheData) => {
+        .then((keyList) => {
             return Promise.all(
-                cacheData.map((cacheDataDelete) => {
-                        if (cacheDataDelete != DATA && key !== RUNDATA) {
-                            console.log( 'Old cache data being removed...', cacheDataDelete);
+                keyList.map((key) => {
+                        if (key != DATA && key !== DATA_CACHE_NAME) {
+                            console.log( 'Old cache data being removed...', key);
+                            return caches.delete(key);
                         }
                     })
-            )
+            );
         })
     )
+        self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
-    if (event.request.url.startsWith(self.location.origin))
+
+self.addevtListener('fetch', function (evt) {
+    if (evt.request.url.startsWith(self.location.origin))
     {
-        event.respondWith(
-            caches.match(event.request).then((dataResponse)
+        evt.respondWith(
+            caches.open(DATA_CACHE_NAME).then((cache)
             => {
-                if (dataResponse) {
-                    return dataResponse;
-                }
-
-                return cache.open(RUNDATA).then((response) => {
-                    return fetch(event.request).then((response) => {
-                        return cacheput(event.request,response.close()).then(() => {
-                            return response;
-
-                        });
+                    return fetch(evt.request).then((response) => { 
+                        if (response.status === 200) {
+                        cache.put(evt.request.url, response.clone());
+                    }
+                    return response;
+                    })
+                    .catch((err) => {
+                        return cache.match(evt.request);
                     });
-                });
-            })
-        )
-    }
-});
+                })
+                .catch((err) => console.log(err))
+        );
+
+        return;
+            }
+
+    evt.respondWith(
+        caches.match(evt.request).then(function (response) {
+          return response || fetch(evt.request);
+        })
+      );
+    });
