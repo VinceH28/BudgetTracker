@@ -1,19 +1,21 @@
 // fFiles located in the public folder
 const FILES_TO_CACHE = [
-    '/',
-    '/index.js',
-    'index.html',
-    '/db.js',
-    '/assets/background_image.png',
+    "/",
+    "/service-worker.js",
+    "manifest.webmanifest",
+    "/index.js",
+    "index.html",
+    "/db.js",
+    "/assets/background_image.png",
     "/icons/icon-192x192.png",
     "/icons/icon-512x512.png",
-    'style.css',
-    'manifest.webmanifest',
-    '/service-worker.js',
+    "style.css",
+    
+    
 ];
 
-const CACHE_NAME = 'static-cache-v1'; 
-const DATA_CACHE_NAME = 'data-cache-v1';
+const CACHE_NAME = "static-cache-v1"; 
+const DATA_CACHE_NAME = "data-cache-v1";
 
 self.addEventListener('install', function (evnt) {
     evnt.waitUnitl(
@@ -34,7 +36,7 @@ self.addEventListener('activate', function (evnt) {
         .then((keyList) => {
             return Promise.all(
                 keyList.map((key) => {
-                        if (key != DATA && key !== DATA_CACHE_NAME) {
+                        if (key != CACHE_NAME && key !== DATA_CACHE_NAME) {
                             console.log( 'Old cache data being removed...', key);
                             return caches.delete(key);
                         }
@@ -47,7 +49,7 @@ self.addEventListener('activate', function (evnt) {
 
 
 self.addEventListener('fetch', function (evnt) {
-    if (evnt.request.url.startsWith(self.location.origin))
+    if (evnt.request.url.include('/api'))
     {
         evnt.respondWith(
             caches.open(DATA_CACHE_NAME).then((cache)
