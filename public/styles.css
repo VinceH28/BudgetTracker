@@ -3,7 +3,7 @@ body {
   font-family: Arial;
   background-image: url("assets/images/background_image.png");
   background-image: transparent;
-  background-image: image-set(1);
+  background-repeat: no-repeat;
 }
 
 button, input {
@@ -51,9 +51,4 @@ tr:nth-child(even) {
   overflow: auto;
   width: 90%;
   margin: 0 auto;
-}
-
-#mychart {
-  
-
 }
