@@ -5,15 +5,18 @@ const FILES_TO_CACHE = [
     'index.html',
     '/db.js',
     '/assets/background_image.png',
+    "/icons/icon-192x192.png",
+    "/icons/icon-512x512.png",
     'style.css',
-    "/service-worker.js",
+    'manifest.webmanifest',
+    '/service-worker.js',
 ];
 
-const CACHE_NAME = 'data-v1'; 
-const DATA_CACHE_NAME = 'DATA_CACHE_NAME';
+const CACHE_NAME = 'static-cache-v1'; 
+const DATA_CACHE_NAME = 'data-cache-v1';
 
-self.addevtListener('install', (evt) => {
-    evt.waitUnitl(
+self.addEventListener('install', function (evnt) {
+    evnt.waitUnitl(
         caches
         .open(CACHE_NAME)
         .then((cache) => {
@@ -24,8 +27,8 @@ self.skipWaiting();
 });
 
 //Clean old cache
-self.addevtListener('activate', function (evt) {
-    evt.waitUnitl(
+self.addEventListener('activate', function (evnt) {
+    evnt.waitUnitl(
     caches
         .keys()
         .then((keyList) => {
@@ -43,20 +46,20 @@ self.addevtListener('activate', function (evt) {
 });
 
 
-self.addevtListener('fetch', function (evt) {
-    if (evt.request.url.startsWith(self.location.origin))
+self.addEventListener('fetch', function (evnt) {
+    if (evnt.request.url.startsWith(self.location.origin))
     {
-        evt.respondWith(
+        evnt.respondWith(
             caches.open(DATA_CACHE_NAME).then((cache)
             => {
-                    return fetch(evt.request).then((response) => { 
+                    return fetch(evnt.request).then((response) => { 
                         if (response.status === 200) {
-                        cache.put(evt.request.url, response.clone());
+                        cache.put(evnt.request.url, response.clone());
                     }
                     return response;
                     })
                     .catch((err) => {
-                        return cache.match(evt.request);
+                        return cache.match(evnt.request);
                     });
                 })
                 .catch((err) => console.log(err))
@@ -65,9 +68,9 @@ self.addevtListener('fetch', function (evt) {
         return;
             }
 
-    evt.respondWith(
-        caches.match(evt.request).then(function (response) {
-          return response || fetch(evt.request);
+    evnt.respondWith(
+        caches.match(evnt.request).then(function (response) {
+          return response || fetch(evnt.request);
         })
       );
     });
