@@ -18,10 +18,8 @@ const CACHE_NAME = "static-cache-v1";
 const DATA_CACHE_NAME = "data-cache-v1";
 
 self.addEventListener('install', function (evnt) {
-    evnt.waitUnitl(
-        caches
-        .open(CACHE_NAME)
-        .then((cache) => {
+    evnt.waitUnitl(caches
+        .open(CACHE_NAME).then((cache) => {
             return cache.addAll(FILES_TO_CACHE);
         })
 );
@@ -31,11 +29,8 @@ self.skipWaiting();
 //Clean old cache
 self.addEventListener('activate', function (evnt) {
     evnt.waitUnitl(
-    caches
-        .keys()
-        .then((keyList) => {
-            return Promise.all(
-                keyList.map((key) => {
+    caches.keys().then((keyList) => {
+            return Promise.all(keyList.map((key) => {
                         if (key != CACHE_NAME && key !== DATA_CACHE_NAME) {
                             console.log( 'Old cache data being removed...', key);
                             return caches.delete(key);
