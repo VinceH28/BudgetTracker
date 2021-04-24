@@ -44,5 +44,18 @@
   <script src="assets/index.js"></script>
   <script src="assets/db.js"></script>
   <script src="./service-worker.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('service-worker.js')
+        .then((registration) => {
+          console.log('***The selected Service worker registered***');
+        })
+        .catch((error) => {
+          console.log('***The selected Service worker failed***');
+          console.log(error);
+        });
+    }
+  </script>
 </body>
 </html>
