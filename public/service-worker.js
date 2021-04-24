@@ -52,8 +52,7 @@ self.addEventListener('fetch', function (evnt) {
     if (evnt.request.url.include('/api'))
     {
         evnt.respondWith(
-            caches.open(DATA_CACHE_NAME).then((cache)
-            => {
+            caches.open(DATA_CACHE_NAME).then((cache)=> {
                     return fetch(evnt.request).then((response) => { 
                         if (response.status === 200) {
                         cache.put(evnt.request.url, response.clone());
