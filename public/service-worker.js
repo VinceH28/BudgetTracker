@@ -9,9 +9,7 @@ const FILES_TO_CACHE = [
     "/assets/background_image.png",
     "/icons/icon-192x192.png",
     "/icons/icon-512x512.png",
-    "style.css",
-    
-    
+    "style.css"
 ];
 
 const CACHE_NAME = "static-cache-v1"; 
@@ -44,8 +42,7 @@ self.addEventListener('activate', function (evnt) {
 
 
 self.addEventListener('fetch', function (evnt) {
-    if (evnt.request.url.include('/api'))
-    {
+    if (evnt.request.url.includes('/api')) {
         evnt.respondWith(
             caches.open(DATA_CACHE_NAME).then((cache)=> {
                     return fetch(evnt.request).then((response) => { 
