@@ -3,10 +3,6 @@ body {
   font-family: Arial;
 }
 
-#wrapper {
-  background-image:url("./assets/images/background_image.png");
-}
-
 button, input {
   font-size: 100%;
   font-family: Arial;
@@ -34,6 +30,7 @@ tr:nth-child(even) {
   margin: 0 auto;
   max-width: 825px;
   text-align: center;
+  background-image:url("./assets/images/background_image.png");
 }
 
 .total {
